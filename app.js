@@ -10,23 +10,6 @@ const mongoose = require('mongoose');
 
 const mongoString = process.env.DATABASE_URL
 var MongoClient = require("mongodb").MongoClient;  
-app.get("/users", function() {  
-  MongoClient.connect("mongodb://localhost:27017/test", function(err, db) {  
-    if (err) next  
-    db  
-      .collection("users")  
-      .find()  
-      .toArray(function(err, result) {  
-        if (err) throw err;  
-
-        res.json(result)  
-      });  
-  });  
-});
-
-app.listen(3000,function(){  
-    console.log('Express app start on port 3000')  
-});
 
 mongoose.connect(mongoString);
 const database = mongoose.connection;
@@ -45,6 +28,23 @@ var consultRouter = require('./routes/consult');
 
 
 var app = express();
+app.get("/users", function() {  
+  MongoClient.connect("mongodb://localhost:27017/test", function(err, db) {  
+    if (err) next  
+    db  
+      .collection("users")  
+      .find()  
+      .toArray(function(err, result) {  
+        if (err) throw err;  
+
+        res.json(result)  
+      });  
+  });  
+});
+
+app.listen(3000,function(){  
+    console.log('Express app start on port 3000')  
+});
 
 app.use(cors());
 
