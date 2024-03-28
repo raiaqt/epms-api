@@ -1,37 +1,34 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 const Patient = require('../models/patient');
 
 router.get('/', async (req, res, next) => {
-  try{
+  try {
     const data = await Patient.find();
-    res.json(data)
-}
-catch(error){
-    res.status(500).json({message: error.message})
-}
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
-router.get('/:id', async (req, res) => {
-  try{
-      const data = await Patient.findById(req.params.id);
-      res.json(data)
+router.get('/:mobile', async (req, res) => {
+  try {
+    const data = await Patient.find({ mobile: req.params.mobile });
+    res.json(data.length === 1 ? data[0] : {});
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-  catch(error){
-      res.status(500).json({message: error.message})
-  }
-})
+});
 
 router.post('/', async (req, res) => {
   const data = new Patient(req.body);
 
-  try{
+  try {
     const dataToSave = await data.save();
-    res.status(200).json(dataToSave)
+    res.status(200).json(dataToSave);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
-  catch(error){
-    res.status(400).json({message: error.message})
-  }
-})
+});
 module.exports = router;
